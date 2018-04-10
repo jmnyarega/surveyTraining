@@ -1,16 +1,18 @@
 import unittest
-from passlib.hash import bcrypt
 
-from app import app
-from app.models.models import db
-from app.models.user_controller import UserStore
-from app.models.bucket_controller import BucketStore
-from app.models.items_controller import ItemStore
+from app import app, db
+from app.models.user import User
+from app.models.events import Events
+from app.models.session import Session
+from app.models.questions import Question
+from app.models.questionGroup import QuestionGroup
+from app.models.group_answers import GroupAnswers
+from app.models.answers import Answers
 
 
 class BaseTest(unittest.TestCase):
     def setUp(self):
-        #setup test environment configuration
+        # setup test environment configuration
         app.config['TESTING'] = True
         app.config['WTF_CSRF_ENABLED'] = False
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
@@ -18,19 +20,23 @@ class BaseTest(unittest.TestCase):
         db.create_all()
 
         self.headers = {"Content-Type": "application/json"}
-        #define a user to be used for registration tests
+        # define a user to be used for registration tests
         self.temp_user = {
-            "username": "Sansa",
+            "firstname": "Sansa",
             "email": "sansa@gmail.com",
-            "password": "wicked",
-            "confirm_password": "wicked"
+            "lastname": "Doe",
+            "gender": "F",
+            "profession": "F",
         }
 
-        #define an existing user
-        self.saved_user = User("tyrion", "tyrion@gmail.com",
-                               bcrypt.hash("lion", rounds=12))
+        # define an existing user
+        self.saved_user = User("firstname", "lastname",
+                               "email", "mobile", "gender", "profession")
         db.session.add(self.saved_user)
         db.session.commit()
+
+    def test_testing(self):
+        self.assertEquals(1, 7)
 
     def tearDown(self):
         db.session.remove

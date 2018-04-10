@@ -1,18 +1,23 @@
+from sqlalchemy.sql import func
+
+from sqlalchemy import Column, Integer, DateTime, String
+
 from app import db
+
 
 class User(db.Model):
     '''
     Defines properties for a user to generate users table in db
     '''
     __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
-    firstname = db.Column(db.String(80), unique=True)
-    lastname = db.Column(db.String(80), unique=True)
-    email = db.Column(db.String(120), unique=True)
-    mobile = db.Column(db.String(120))
-    gender = db.Column(db.String(10))
-    profession = db.Column(db.String(10))
-    created_at = db.Column(db.DateTime())
+    id = Column(Integer, primary_key=True)
+    firstname = Column(String(80), nullable=False)
+    lastname = Column(String(80), nullable=False)
+    email = Column(String(120), unique=True)
+    mobile = Column(String(120), unique=True)
+    gender = Column(String(10), nullable=False)
+    profession = Column(String(10), nullable=False)
+    created_at = Column(DateTime(), server_default=func.now(), nullable=False)
 
     def __init__(
         self,
@@ -21,16 +26,15 @@ class User(db.Model):
         email,
         mobile,
         gender,
-        profession,
-        created_at
-        ):
+        profession
+    ):
+
         self.firstname = firstname
         self.lastname = lastname
         self.email = email
         self.mobile = mobile
         self.gender = gender
         self.profession = profession
-        self.created_at = created_at
 
     def __str__(self):
         return "User(id='%s')" % self.id

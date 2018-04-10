@@ -7,6 +7,7 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/training'
     JWT_AUTH_URL_RULE = '/api/v1/auth/login'
 
+
 class TestingConfig(Config):
     SECRET_KEY = '8h87yhggfd45dfds22as'
     TESTING = True
