@@ -61,3 +61,19 @@ class Events(db.Model):
             event_dict['end_date'] = self.format_date(event.end_date)
             event_list.append(event_dict)
         return event_list
+
+    def delete_event(self, event_id):
+        event = Events.query.filter_by(id=event_id).first()
+        db.session.delete(event)
+        db.session.commit()
+
+    def update_event(self, data):
+        event = Events.query.filter_by(id=data.get('id')).first()
+        event.name = data.get('name')
+        event.description = data.get('description')
+        if data.get('start_date'):
+            event.start_date = data.get('start_date')
+        if data.get('start_date'):
+            event.end_date = data.get('end_date')
+        db.session.add(event)
+        db.session.commit()

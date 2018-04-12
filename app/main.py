@@ -5,9 +5,6 @@ import uuid
 from flask_jwt import JWT, jwt_required, current_identity
 
 from app import app
-from app.models.events import Events
-
-event = Events()
 
 # setting up authorization headers
 authorizations = {
@@ -29,11 +26,15 @@ api = Api(app, version='1.0', title='Training Api',
 # create form-fields for swagger api
 # ---------------------------------
 
-event = api.model('Events', {
+events = api.model('Events', {
     'name': fields.String,
     'description': fields.String,
 })
 
+login_test = api.model('Login', {
+    'username': fields.String,
+    'description': fields.String,
+})
 # ---------------------------------
 
 
@@ -58,7 +59,6 @@ def identity(payload):
 # initializing jwt variable
 jwt = JWT(app, verify, identity)
 
-
 parser = api.parser()
 parser.add_argument('task', type=str, required=True,
                     help='The task details', location='form')
@@ -67,43 +67,6 @@ parser.add_argument('task', type=str, required=True,
 @api.errorhandler
 def handle_custom_exception(error):
     return {'message': str(error)}, 401
-
-
-@api.route('/events/', strict_slashes=False,
-           endpoint='events', methods=['POST', 'GET'])
-class Event(Resource):
-
-    def get(self, **kwargs):
-        ''' gets data from `events` table  '''
-        if kwargs.get("event_id") is not None:
-            response = event.get_events(
-                kwargs['event_id'])
-        else:
-            response = event.get_events()
-        return response
-
-    @jwt_required()
-    def delete(self, **kwargs):
-        ''' deletes data from `events` table  '''
-        response = event.delete_event(kwargs['event_id'])
-        return response
-
-    @api.expect(event)
-    @api.doc(parser=parser)
-    @jwt_required()
-    def put(self, event_id):
-        ''' updates data from `events` table  '''
-        data = request.get_json()
-        response = event.update_event(data)
-        return response
-
-    @api.expect(event)
-    @api.doc(parser=parser)
-    def post(self, **kwargs):
-        ''' adds data to `events` table  '''
-        data = request.get_json()
-        response = event.add_event(data)
-        return response
 
 
 @api.route('/auth/login', strict_slashes=False)
