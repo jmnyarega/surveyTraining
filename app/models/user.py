@@ -21,12 +21,12 @@ class User(db.Model):
 
     def __init__(
         self,
-        firstname,
-        lastname,
-        email,
-        mobile,
-        gender,
-        profession
+        firstname='',
+        lastname='',
+        email='',
+        mobile='',
+        gender='',
+        profession=''
     ):
 
         self.firstname = firstname
@@ -38,3 +38,6 @@ class User(db.Model):
 
     def __str__(self):
         return "User(id='%s')" % self.id
+
+    def authenticate(self, username):
+        print(username)

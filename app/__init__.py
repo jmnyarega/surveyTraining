@@ -11,5 +11,5 @@ from .models.events import Events
 from .models.session import Session
 from .models.questions import Question
 from .models.questionGroup import QuestionGroup
-from .models.group_answers import GroupAnswers
-from .models.answers import Answers
+from .models.user_answers import UserAnswers
+from .models.possible_answers import PossibleAnswers

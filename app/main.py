@@ -5,10 +5,9 @@ import uuid
 from flask_jwt import JWT, jwt_required, current_identity
 
 from app import app
-from app.models.events import Events
+from app.models.user import User
 
-event = Events()
-
+user = User()
 # setting up authorization headers
 authorizations = {
     'apikey': {
@@ -29,11 +28,20 @@ api = Api(app, version='1.0', title='Training Api',
 # create form-fields for swagger api
 # ---------------------------------
 
-event = api.model('Events', {
+events = api.model('Events', {
     'name': fields.String,
     'description': fields.String,
 })
 
+sessions = api.model('Sessions', {
+    'user_id': fields.String,
+    'event_id': fields.String,
+})
+
+login_test = api.model('Login', {
+    'username': fields.String,
+    'description': fields.String,
+})
 # ---------------------------------
 
 
@@ -43,13 +51,14 @@ def verify(username, password):
         return "invalid token"
     u = user.authenticate(username)
     if u:
-        if check_password_hash(u.password, password):
+        if u.password == password:
             return u
     else:
         return False
 
 
 def identity(payload):
+    print(payload)
     ''' Getting user_id from payload to identify the current user '''
     user_id = payload['identity']
     return user_id
@@ -57,7 +66,6 @@ def identity(payload):
 
 # initializing jwt variable
 jwt = JWT(app, verify, identity)
-
 
 parser = api.parser()
 parser.add_argument('task', type=str, required=True,
@@ -68,45 +76,12 @@ parser.add_argument('task', type=str, required=True,
 def handle_custom_exception(error):
     return {'message': str(error)}, 401
 
-
-@api.route('/events/', strict_slashes=False,
-           endpoint='events', methods=['POST', 'GET'])
-class Event(Resource):
-
-    def get(self, **kwargs):
-        ''' gets data from `events` table  '''
-        if kwargs.get("event_id") is not None:
-            response = event.get_events(
-                kwargs['event_id'])
-        else:
-            response = event.get_events()
-        return response
-
-    @jwt_required()
-    def delete(self, **kwargs):
-        ''' deletes data from `events` table  '''
-        response = event.delete_event(kwargs['event_id'])
-        return response
-
-    @api.expect(event)
-    @api.doc(parser=parser)
-    @jwt_required()
-    def put(self, event_id):
-        ''' updates data from `events` table  '''
-        data = request.get_json()
-        response = event.update_event(data)
-        return response
-
-    @api.expect(event)
-    @api.doc(parser=parser)
-    def post(self, **kwargs):
-        ''' adds data to `events` table  '''
-        data = request.get_json()
-        response = event.add_event(data)
-        return response
+@api.errorhandler
+def handle_custom_exception(error):
+    return {'message': str(error)}, 500
 
 
-@api.route('/auth/login', strict_slashes=False)
+@api.route('/api/v1/auth/login', strict_slashes=False)
 class Generate(Resource):
     @api.expect(login_test)
     def post(self):
