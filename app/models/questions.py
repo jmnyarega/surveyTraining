@@ -6,9 +6,9 @@ from app import db
 
 
 class Question(db.Model):
-    '''
+    """
     Defines properties for question to generate questions table in the database
-    '''
+    """
     __tablename__ = 'questions'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     question = db.Column(db.String(80), nullable=False)

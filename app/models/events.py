@@ -11,10 +11,10 @@ helper = Helpers()
 
 
 class Events(db.Model):
-    '''
+    """
     Defines properties for an event to generate
     an event table in the database
-    '''
+    """
     __tablename__ = 'events'
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(80), nullable=False)

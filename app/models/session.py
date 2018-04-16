@@ -11,9 +11,9 @@ helper = Helpers()
 
 
 class Session(db.Model):
-    '''
+    """
     Defines properties for an event to generate an event table in the database
-    '''
+    """
     __tablename__ = 'sessions'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))

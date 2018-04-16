@@ -6,10 +6,10 @@ from app import db
 
 
 class PossibleAnswers(db.Model):
-    '''
+    """
     Defines properties for possible answers to generate possible answers
     table in the database
-    '''
+    """
     __tablename__ = 'possible_answers'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     question_id = db.Column(db.Integer, db.ForeignKey('questions.id'),

@@ -13,3 +13,4 @@ from .models.questions import Question
 from .models.questionGroup import QuestionGroup
 from .models.user_answers import UserAnswers
 from .models.possible_answers import PossibleAnswers
+from .models.roles import Role

@@ -1,14 +1,14 @@
 from sqlalchemy.sql import func
 
-from sqlalchemy import Column, Integer, DateTime, String
+from sqlalchemy import Column, Integer, DateTime, String, ForeignKey
 
 from app import db
 
 
 class User(db.Model):
-    '''
+    """
     Defines properties for a user to generate users table in db
-    '''
+    """
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     firstname = Column(String(80), nullable=False)
@@ -17,6 +17,7 @@ class User(db.Model):
     mobile = Column(String(120), unique=True)
     gender = Column(String(10), nullable=False)
     profession = Column(String(10), nullable=False)
+    role_id = Column(Integer, ForeignKey('roles.id'))
     created_at = Column(DateTime(), server_default=func.now(), nullable=False)
 
     def __init__(

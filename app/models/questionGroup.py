@@ -6,10 +6,10 @@ from app import db
 
 
 class QuestionGroup(db.Model):
-    '''
+    """
     Defines properties for question group to generate question
     group table in the database
-    '''
+    """
     __tablename__ = 'question_group'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     question_id = db.Column(db.Integer, db.ForeignKey('questions.id'))

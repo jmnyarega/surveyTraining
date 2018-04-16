@@ -4,6 +4,7 @@ from flask_migrate import Migrate, MigrateCommand
 from app.main import *
 from app.EventsResource import *
 from app.SessionResource import *
+from app.RolesResource import *
 
 migrate = Migrate(app, db)
 

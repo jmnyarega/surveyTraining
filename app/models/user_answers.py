@@ -6,9 +6,9 @@ from app import db
 
 
 class UserAnswers(db.Model):
-    '''
+    """
     Defines properties for answer to generate answers table in the database
-    '''
+    """
     __tablename__ = 'user_answers'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
