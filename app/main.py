@@ -21,17 +21,6 @@ api = Api(app, version='1.0', title='Training Api',
 
 # create form-fields for swagger api
 # ---------------------------------
-
-events = api.model('Events', {
-    'name': fields.String,
-    'description': fields.String,
-})
-
-sessions = api.model('Sessions', {
-    'user_id': fields.String,
-    'event_id': fields.String,
-})
-
 login_test = api.model('Login', {
     'username': fields.String,
     'description': fields.String,
@@ -43,6 +32,7 @@ parser.add_argument('task', type=str, required=True,
                     help='The task details', location='form')
 
 _users = api.namespace('Users', description="Managing users")
+
 
 @api.errorhandler
 def handle_custom_exception(error):

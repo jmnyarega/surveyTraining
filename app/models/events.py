@@ -1,5 +1,4 @@
 from sqlalchemy.sql import func
-
 from sqlalchemy import Column, Integer, DateTime, ForeignKey, String
 
 from app import db
@@ -40,44 +39,4 @@ class Events(db.Model):
         self.token = token
 
     def __str__(self):
-        return "Event(id='%s')" % self.id
-
-    def add_event(self, data):
-        event = Events(
-            name=data.get('name'),
-            description=data.get('description')
-        )
-        db.session.add(event)
-        db.session.commit()
-        return event.__str__()
-
-    def get_events(self, *args):
-        events = Events.query.all()
-        if len(args) > 0:  
-            events = Events.query.filter_by(id=args[0])
-        event_list = []
-        for event in events:
-            event_dict = {}
-            event_dict['id'] = event.id
-            event_dict['name'] = event.name
-            event_dict['description'] = event.description
-            event_dict['start_date'] = helper.format_date(event.start_date)
-            event_dict['end_date'] = helper.format_date(event.end_date)
-            event_list.append(event_dict)
-        return event_list
-
-    def delete_event(self, event_id):
-        event = Events.query.filter_by(id=event_id).first()
-        db.session.delete(event)
-        db.session.commit()
-
-    def update_event(self, data):
-        event = Events.query.filter_by(id=data.get('id')).first()
-        event.name = data.get('name')
-        event.description = data.get('description')
-        if data.get('start_date'):
-            event.start_date = data.get('start_date')
-        if data.get('start_date'):
-            event.end_date = data.get('end_date')
-        db.session.add(event)
-        db.session.commit()
+        return self.name

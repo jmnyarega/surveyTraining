@@ -1,10 +1,6 @@
-import datetime
-
 from sqlalchemy.sql import func
 
 from app import db
-
-# helpers
 from .helpers import Helpers
 
 helper = Helpers()
@@ -34,24 +30,4 @@ class Session(db.Model):
         self.start_date = start_date
 
     def __str__(self):
-        return "Session(id='%s')" % self.id
-
-    def get_session(self, *args):
-        sessions = Session.query.first()
-        if len(args) > 0:
-            sessions = Session.query.filter_by(id=args[0])
-        return helper.unpack_query_session_object(sessions)
-
-    def add_session(self, data):
-        session = Session(
-            event_id=data.get('event_id'),
-            user_id=data.get('user_id')
-        )
-        db.session.add(session)
-        db.session.commit()
-        print(session)
-
-    def delete_session(self, session_id):
-        session = Session.query.filter_by(id=session_id).first()
-        db.session.delete(session)
-        db.session.commit()
+        return self.id
