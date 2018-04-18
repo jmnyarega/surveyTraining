@@ -1,19 +1,34 @@
+import os
+
+
 class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 class DevelopmentConfig(Config):
-    SECRET_KEY = 'asdasd_josiasasdasdklajdiaidiajsdiashiasd'
-    # SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/training'
-    SQLALCHEMY_DATABASE_URI = 'postgres://yilscmfugegojd:e6b98b62544ab2d9555f4f348bd868c62ae7758af2b5ac383540eee7186c37e9@ec2-54-225-200-15.compute-1.amazonaws.com:5432/ddr9103f9ar61k'
-    JWT_AUTH_URL_RULE = '/api/v1/auth/login'
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+    JWT_AUTH_URL_RULE = os.environ.get('JWT_AUTH_URL_RULE')
     DEBUG = True
 
 
 class TestingConfig(Config):
-    SECRET_KEY = '8h87yhggfd45dfds22as'
+    SECRET_KEY = os.environ.get('TESTING_SECRET_KEY')
     TESTING = True
-    WTF_CSRF_ENABLED = False
+    WTF_CSRF_ENABLED = os.environ.get('WTF_CSRF_ENABLED')
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'postgresql://'\
-        'localhost/db_for_api_tests'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('TESTING_SQLALCHEMY_DATABASE_URL')
+
+
+class ProductionConfig(Config):
+    DEBUG = False
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+    JWT_AUTH_URL_RULE = os.environ.get('JWT_AUTH_URL_RULE')
+
+
+app_configuration = {
+    'development': DevelopmentConfig,
+    'testing': TestingConfig,
+    'production': ProductionConfig
+}

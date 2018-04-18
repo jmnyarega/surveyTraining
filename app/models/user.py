@@ -1,7 +1,6 @@
 from sqlalchemy.sql import func
 
 from sqlalchemy import Column, Integer, DateTime, String, ForeignKey
-
 from app import db
 
 

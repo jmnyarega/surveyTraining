@@ -1,3 +1,7 @@
+from flask import jsonify, make_response
+from flask_restplus import marshal
+
+
 class Helpers():
 
     def __init__(self):
@@ -6,47 +10,26 @@ class Helpers():
     def format_date(self, date):
         return date.strftime("%Y-%m-%d %H:%M:%S")
 
-    def unpack_query_session_object(self, object):
-        try:
-            session_list = []
-            for session in object:
-                session_dict = {}
-                session_dict['id'] = session.id
-                session_dict['event_id'] = session.event_id
-                session_dict['user_id'] = session.user_id
-                session_dict['start_date'] = self.format_date(
-                    session.start_date)
-                session_dict['created_at'] = self.format_date(
-                    session.created_at)
-                session_list.append(session_dict)
-            return session_list
-        except Exception as e:
-            session_list = []
-            session_dict = {}
-            session_dict['id'] = object.id
-            session_dict['event_id'] = object.event_id
-            session_dict['user_id'] = object.user_id
-            session_dict['start_date'] = self.format_date(object.start_date)
-            session_dict['created_at'] = self.format_date(object.created_at)
-            session_list.append(session_dict)
-            return session_list
+    def handle_200_success(self, message):
+        return make_response(jsonify(message), 200)
 
-    def unpack_query_roles_object(self, object):
-        try:
-            session_list = []
-            for session in object:
-                session_dict = {}
-                session_dict['id'] = session.id
-                session_dict['name'] = session.name
-                session_dict['created_at'] = self.format_date(
-                    session.created_at)
-                session_list.append(session_dict)
-            return session_list
-        except Exception as e:
-            session_list = []
-            session_dict = {}
-            session_dict['id'] = object.id
-            session_dict['name'] = object.name
-            session_dict['created_at'] = self.format_date(object.created_at)
-            session_list.append(session_dict)
-            return session_list
+    def handle_201_success(self, message):
+        return make_response(jsonify({'message': message}), 201)
+
+    def handle_204_delete_success(self, message):
+        return make_response(jsonify({'message': message}), 202)
+
+    def handle_400_bad_request(self, message):
+        return make_response(jsonify({'message': message}), 400)
+
+    def handle_401_error(self, message):
+        return make_response(jsonify({'message': message}), 401)
+
+    def handle_404_success(self, message):
+        return make_response(jsonify({'message': message}), 404)
+
+    def handle_500_error(self, message):
+        return make_response(jsonify({'message': message}), 500)
+
+    def serialize(self, sqlalchemy_query, subject, marshal_object):
+        return {subject:[marshal(session, marshal_object) for session in sqlalchemy_query]}
