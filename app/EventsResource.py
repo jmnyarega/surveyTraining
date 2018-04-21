@@ -24,23 +24,26 @@ events_marshal = api.model('Events', {
 
 @_events.route('/api/v1/events/', strict_slashes=False,
                endpoint='events', methods=['POST', 'GET', 'PUT'])
-@_events.route('/api/v1/events/<event_id>', strict_slashes=False,
+@_events.route('/api/v1/events/<int:event_id>', strict_slashes=False,
                endpoint='event', methods=['DELETE', 'GET'])
 class EventsResource(Resource):
 
     def get(self, **kwargs):
-        """ gets data from `events` table  """
-        event_id = kwargs.get('event_id')
-        event_obj = Events.query.all()
-        if kwargs.get('event_id'):
-            event_obj = [Events.query.filter_by(id=event_id).first()]
+        """ gets event(s) from `events` table  """
+        try:
+            event_id = kwargs.get('event_id')
+            event_obj = Events.query.all()
+            if event_id:
+                event_obj = Events.query.filter_by(id=event_id).first()
 
-        if event_obj:
-            return helper.handle_200_success(
-                helper.serialize(event_obj, 'data', events_marshal)
-            )
-        else:
-            return helper.handle_400_bad_request([])
+            if event_obj:
+                return helper.handle_200_success(
+                    helper.serialize([event_obj], 'data', events_marshal)
+                )
+            else:
+                return helper.handle_404_success([])
+        except Exception as e:
+            return helper.handle_500_error(str(e))
 
     def delete(self, event_id):
         """ deletes data from `events` table  """
@@ -50,13 +53,12 @@ class EventsResource(Resource):
             db.session.commit()
             return helper.handle_204_delete_success('Event Successfully deleted')
         except Exception as e:
-            print(e)
-            return helper.handle_400_bad_request('Error in deleting event')
+            return helper.handle_400_bad_request(str(e))
 
     @api.expect(events_marshal)
     @api.doc(parser=parser)
     def put(self):
-        """ updates data from `events` table  """
+        """ updates event => `events` table  """
         data = request.get_json()
         try:
             event_obj = Events.query.filter_by(id=data.get('id')).first()
@@ -70,12 +72,12 @@ class EventsResource(Resource):
             db.session.commit()
             return helper.handle_201_success([data])
         except Exception as e:
-            return helper.handle_400_bad_request('Error in updating event')
+            return helper.handle_400_bad_request(str(e))
 
     @api.expect(events_marshal)
     @api.doc(parser=parser)
     def post(self):
-        """ adds data to `events` table  """
+        """ adds new event to `events` table  """
         data = request.get_json()
         try:
             event_obj = Events(
@@ -86,4 +88,4 @@ class EventsResource(Resource):
             db.session.commit()
             return helper.handle_201_success(data)
         except Exception as e:
-            return helper.handle_400_bad_request('Error in adding an event')
+            return helper.handle_400_bad_request(str(e))

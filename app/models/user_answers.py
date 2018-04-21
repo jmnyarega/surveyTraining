@@ -18,10 +18,10 @@ class UserAnswers(db.Model):
 
     def __init__(
         self,
-        user_id,
-        session_id,
-        question_id,
-        answer
+        user_id='',
+        session_id='',
+        question_id='',
+        answer=''
     ):
         self.user_id = user_id
         self.session_id = session_id

@@ -19,38 +19,42 @@ sessions_marshal = api.model('Sessions', {
 
 @_session.route('/api/v1/sessions/', strict_slashes=False,
                 endpoint='sessions', methods=['POST', 'GET', 'PUT'])
-@_session.route('/api/v1/sessions/<session_id>', strict_slashes=False,
+@_session.route('/api/v1/sessions/<int:session_id>', strict_slashes=False,
                 endpoint='session', methods=['DELETE', 'GET'])
 class SessionResource(Resource):
 
     def get(self, **kwargs):
-        """ gets data from `sessions` table  """
-        session_id = kwargs.get('session_id')
-        session_obj = Session.query.all()
-        if kwargs.get('session_id'):
-            session_obj = [Session.query.filter_by(id=session_id).first()]
+        """ gets session(s) from `sessions` table  """
+        try:
+            session_id = kwargs.get('session_id')
+            session_obj = Session.query.all()
+            if session_id:
+                session_obj = Session.query.filter_by(id=session_id).first()
 
-        if session_obj:
-            return helper.handle_200_success(
-                helper.serialize(session_obj, 'data', sessions_marshal)
-            )
-        else:
-            return helper.handle_404_success([])
+            if session_obj:
+                return helper.handle_200_success(
+                    helper.serialize([session_obj], 'data', sessions_marshal)
+                )
+            else:
+                return helper.handle_404_success([])
+        except Exception as e:
+            return helper.handle_400_bad_request(str(e))
 
     def delete(self, **kwargs):
-        """ deletes data from `events` table  """
+        """ deletes data from `session` table  """
+        session_id = kwargs.get ('session_id')
         try:
-            session = Session.query.filter_by(id=kwargs.get('session_id')).first()
+            session = Session.query.filter_by(id=session_id).first()
             db.session.delete(session)
             db.session.commit()
             return helper.handle_204_delete_success('Session deleted successfully')
         except Exception as e:
-            return helper.handle_400_bad_request('Error in deleting session')
+            return helper.handle_400_bad_request(str(e))
 
     @api.expect(sessions_marshal)
     @api.doc(parser=parser)
     def post(self):
-        """ adds data to `events` table  """
+        """ adds data to `session` table  """
         try:
             data = request.get_json()
             session = Session(
@@ -61,4 +65,4 @@ class SessionResource(Resource):
             db.session.commit()
             return helper.handle_201_success('Session successfully created')
         except Exception as e:
-            return helper.handle_400_bad_request('Error in adding session')
+            return helper.handle_400_bad_request(str(e))
