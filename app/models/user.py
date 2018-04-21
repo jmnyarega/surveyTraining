@@ -26,7 +26,8 @@ class User(db.Model):
         email='',
         mobile='',
         gender='',
-        profession=''
+        profession='',
+        role_id=''
     ):
 
         self.firstname = firstname
@@ -35,9 +36,7 @@ class User(db.Model):
         self.mobile = mobile
         self.gender = gender
         self.profession = profession
+        self.role_id = role_id
 
     def __str__(self):
         return "User(id='%s')" % self.id
-
-    def authenticate(self, username):
-        print(username)
