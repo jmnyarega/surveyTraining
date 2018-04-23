@@ -6,3 +6,4 @@ app/__init__.pyc
 *.pyc
 .vscode/
 .idea/
+.env

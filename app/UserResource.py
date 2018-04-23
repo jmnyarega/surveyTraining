@@ -54,6 +54,8 @@ class UserResource(Resource):
             return helper.handle_200_success(
                 helper.serialize([user_obj], 'data', user_marshal)
             )
+        else:
+            return helper.handle_404_success([])
 
     def delete(self, **kwargs):
         """ deletes user from `users` table  """

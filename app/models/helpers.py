@@ -1,3 +1,7 @@
+import os
+import datetime
+
+import jwt
 from flask import jsonify, make_response
 from flask_restplus import marshal
 
@@ -33,3 +37,22 @@ class Helpers():
 
     def serialize(self, sqlalchemy_query, subject, marshal_object):
         return {subject:[marshal(session, marshal_object) for session in sqlalchemy_query]}
+
+    def generate_token(self, data):
+        """
+        Generates the Auth Token
+        :return: string
+        """
+        try:
+            payload = {
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
+                'iat': datetime.datetime.utcnow(),
+                'data': data
+            }
+            return jwt.encode(
+                payload,
+                os.getenv('SECRET_KEY'),
+                algorithm='HS256'
+            )
+        except Exception as e:
+            return e

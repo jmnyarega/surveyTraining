@@ -5,6 +5,8 @@ from app.main import *
 from app.EventsResource import *
 from app.SessionResource import *
 from app.RolesResource import *
+from app.AnswersResource import *
+from app.UserResource import *
 
 migrate = Migrate(app, db)
 
