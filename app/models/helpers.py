@@ -31,5 +31,5 @@ class Helpers():
     def handle_500_error(self, message):
         return make_response(jsonify({'message': message}), 500)
 
-    def serialize(self, sqlalchemy_query, subject, marshal_object):
-        return {subject:[marshal(session, marshal_object) for session in sqlalchemy_query]}
+    def serialize(self, sqlalchemy_query, marshal_object):
+        return { 'data':[marshal(session, marshal_object) for session in sqlalchemy_query] }

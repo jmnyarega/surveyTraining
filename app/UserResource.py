@@ -52,7 +52,7 @@ class UserResource(Resource):
             return helper.handle_404_success([])
         elif  user_obj:
             return helper.handle_200_success(
-                helper.serialize([user_obj], 'data', user_marshal)
+                helper.serialize([user_obj], user_marshal)
             )
 
     def delete(self, **kwargs):

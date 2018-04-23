@@ -36,7 +36,7 @@ class AnswerResource(Resource):
 
             if answer_obj:
                 return helper.handle_200_success(
-                    helper.serialize([answer_obj], 'data', answers_marshal)
+                    helper.serialize([answer_obj], answers_marshal)
                 )
             else:
                 return helper.handle_404_success([])

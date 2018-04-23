@@ -38,7 +38,7 @@ class EventsResource(Resource):
 
             if event_obj:
                 return helper.handle_200_success(
-                    helper.serialize([event_obj], 'data', events_marshal)
+                    helper.serialize([event_obj], events_marshal)
                 )
             else:
                 return helper.handle_404_success([])

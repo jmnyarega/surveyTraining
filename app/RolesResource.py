@@ -32,7 +32,7 @@ class RolesResource(Resource):
 
             if role_obj:
                 return helper.handle_200_success(
-                    helper.serialize([role_obj], 'data', roles_marshal)
+                    helper.serialize([role_obj], roles_marshal)
                 )
             else:
                 return helper.handle_404_success([])

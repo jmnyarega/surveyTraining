@@ -30,10 +30,9 @@ class SessionResource(Resource):
             session_obj = Session.query.all()
             if session_id:
                 session_obj = Session.query.filter_by(id=session_id).first()
-
             if session_obj:
                 return helper.handle_200_success(
-                    helper.serialize([session_obj], 'data', sessions_marshal)
+                    helper.serialize([session_obj], sessions_marshal)
                 )
             else:
                 return helper.handle_404_success([])
