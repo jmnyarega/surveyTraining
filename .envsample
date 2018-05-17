@@ -3,7 +3,7 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # development
 SECRET_KEY = 'secret key'
-SQLALCHEMY_DATABASE_URI = 'thisisdatabaseurl'
+DATABASE_URL = 'thisisdatabaseurl'
 JWT_AUTH_URL_RULE='login url'
 DEBUG=True
 
@@ -12,4 +12,4 @@ WTF_CSRF_ENABLED = False
 TESTING_SECRET_KEY = 'secret key'
 TESTING = True
 DEBUG_MODE_TESTING = True
-TESTING_SQLALCHEMY_DATABASE_URL = 'thisisdatabaseurl'
+TESTING_DATABASE_URL = 'thisisdatabaseurl'

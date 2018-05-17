@@ -2,6 +2,7 @@ import os
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 
 db = SQLAlchemy()
 
@@ -18,6 +19,7 @@ from .models.roles import Role
 
 def create_app(environment):
     app = Flask(__name__)
+    CORS(app)
     app.config.from_object(environment)
     db.init_app(app)
     return app
